@@ -1,12 +1,10 @@
 import React from 'react';
 
 
-export const LangauageSelector = () => {
+export const LangauageSelector = (props) => {
 
-        return (
-            <div>
-                
-            </div>
-        )
+    return (
+        <li className="lang-list-li" onClick = {props.handleLangSelection}><a className={"lang-list-li-a " + (props.isActive ? "lang-list-li-a-selected" : "")}><span>✔</span>{props.languageName}</a></li>
+    )
 
 }
