@@ -1,6 +1,8 @@
+import { computeHeadingLevel } from '@testing-library/dom';
 import React, { useState } from 'react';
 import './LangauageSelectionContainer.css';
 import { LangauageSelector } from './LangauageSelector';
+import { Popup } from "./Popup/Popup";
 
 export const LangauageSelectionContainer = () => {
 
@@ -8,7 +10,8 @@ export const LangauageSelectionContainer = () => {
     { label: 'hin', languageName: 'Hindi', isActive: false},
     { label: 'mar', languageName: 'Marathi', isActive: false}]
 
-    const [selectedLanguages, setSelectedLanguages] = useState(languages);
+    const [selectedLanguages, setSelectedLanguages] = useState([]);
+    const [isOpen, setOpen] = useState(false);
 
     const handleLangSelectionChange = (selectedLanguage) => {
         console.log(selectedLanguage);
@@ -27,7 +30,27 @@ export const LangauageSelectionContainer = () => {
 
     }   
 
-    return <div className="main-container">
+    const handlePopup = () => {
+        setOpen(!isOpen);
+    }
+
+    const addLanguage = (langaugeInput) => {
+        const languageObj = {label : langaugeInput.slice(0,2).toLowerCase(),
+                       languageName: langaugeInput,
+                        isActive: false }
+
+        let languages = [...selectedLanguages];
+
+        languages.push(languageObj);
+
+        setSelectedLanguages(languages);
+        console.log(languages);
+        handlePopup();
+    }
+
+
+
+    return isOpen ? <Popup handleClosePopup = {handlePopup} handleAddLangauge = {addLanguage}/> : <div className="main-container">
         <div className="container">
             <div className="wrap-box">
                 <div className="text-center">
@@ -41,13 +64,12 @@ export const LangauageSelectionContainer = () => {
                                      languageName= {language.languageName} 
                                      isActive = {language.isActive} />
                         })}
-                        <li className="lang-list-li">
+                        <li className="lang-list-li" onClick = {handlePopup}>
                             <a className="add-new-lang lang-list-li-a">
                                 <label>+</label>
                                      Add Langauage
                             </a>
                         </li>
-
                     </ul>
 
                     <button className="btn btn-orange" name='make-list-button'>Let's make list of vocabulary</button>
