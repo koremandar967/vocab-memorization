@@ -1,8 +1,8 @@
 import { computeHeadingLevel } from '@testing-library/dom';
 import React, { useState } from 'react';
 import './LangauageSelectionContainer.css';
-import { LangauageSelector } from './LangauageSelector';
-import { Popup } from "./Popup/Popup";
+import { LangauageSelector } from '../LangauageSelector/LangauageSelector';
+import { Popup } from "../Popup/Popup";
 
 export const LangauageSelectionContainer = () => {
 
