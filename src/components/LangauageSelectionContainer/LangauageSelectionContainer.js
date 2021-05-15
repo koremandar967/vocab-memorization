@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './LangauageSelectionContainer.css';
 import { LangauageSelector } from '../LangauageSelector/LangauageSelector';
 import { Popup } from "../Popup/Popup";
+import { VocabularyMaker } from "../VocabularyMaker/VocabularyMaker";
 
 export const LangauageSelectionContainer = () => {
 
@@ -12,10 +13,11 @@ export const LangauageSelectionContainer = () => {
 
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [isOpen, setOpen] = useState(false);
+    const [isVocabMakerOpen, setVocabMakerOpen] = useState(false);
     const [isMakeListDisabled, setMakeListDisabled] = useState(true);
     const [isAddLanguageActive, setAddLanguageActive] = useState(true);
-
-
+    const [nativeLanguage,setNativeLanguage] = useState(""); 
+ 
     const handleLangSelectionChange = (selectedLanguage) => {
         console.log(selectedLanguage);
         let languages = [...selectedLanguages];
@@ -23,6 +25,7 @@ export const LangauageSelectionContainer = () => {
         for(let index in languages) {
             if(languages[index].languageName === selectedLanguage) {
                 languages[index].isActive = true;
+                setNativeLanguage(selectedLanguage);
             } else {
                 languages[index].isActive = false;
             }
@@ -70,12 +73,16 @@ export const LangauageSelectionContainer = () => {
         handlePopup();
     }
 
+    const handleVocabMaker = () => {
+        setVocabMakerOpen(true);
+    }
+
 
 
     return isOpen ? <Popup handleClosePopup = {handlePopup} handleAddLangauge = {addLanguage}/> : <div className="main-container">
         <div className="container">
             <div className="wrap-box">
-                <div className="text-center">
+                {isVocabMakerOpen ? <VocabularyMaker nativeLang = {nativeLanguage.toUpperCase()}/> : <div className="text-center">
                     <h3 className="top-header">Add & Select Langauage</h3>
                     <p className="text-color-gray">Add langauages which you know <mark className="mark-box">(Min 2)</mark> and <mark className="mark-box">(Max 4)</mark> and select which is your native.</p>
 
@@ -94,8 +101,9 @@ export const LangauageSelectionContainer = () => {
                         </li>}
                     </ul>
 
-                    <button className="btn btn-orange" disabled={isMakeListDisabled} name='make-list-button'>Let's make list of vocabulary</button>
-                </div>
+                    <button className="btn btn-orange" disabled={isMakeListDisabled} name='make-list-button'
+                    onClick = {handleVocabMaker}>Let's make list of vocabulary</button>
+                </div>}            
             </div>
         </div>
     </div>
