@@ -4,9 +4,21 @@ import "./Popup.css";
 export const Popup = (props) => {
 
     const [langauageInput, setLangauageInput] = useState("");
+    const [isLangInputInvalid, setLangInputInvalid] = useState(false);
 
     const handleInputChange = (e) => {
         setLangauageInput(e.target.value);
+    }
+
+    const addLanguage = () => {
+
+        if(langauageInput.length == 0) {
+            setLangInputInvalid(true);
+        } else {
+            props.handleAddLangauge(langauageInput);
+            setLangInputInvalid(false);
+        }
+
     }
 
     return (
@@ -16,7 +28,8 @@ export const Popup = (props) => {
                 <div className = "model-body">
                     <h2 className = "text-center">Add New Language</h2>
                     <input type="text" id="lang" name="lang" placeholder = "Language Name" onChange ={handleInputChange}></input>
-                    <button className="btn btn-orange" name='add-lang-button' onClick = {() => props.handleAddLangauge(langauageInput)}>I know this language</button>
+                    {isLangInputInvalid && <span className = "text-danger">This field is required</span>}
+                    <button className="btn btn-orange" name='add-lang-button' onClick = {addLanguage}>I know this language</button>
                 </div>
             </div>
         </div>

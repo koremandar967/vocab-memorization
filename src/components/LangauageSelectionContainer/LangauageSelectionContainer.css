@@ -192,3 +192,10 @@ label {
     padding: 10px 20px;
 }
 
+.btn:disabled {
+    cursor: not-allowed;
+    /* filter: alpha(opacity=65); */
+    opacity: .65;
+    box-shadow: none;
+}
+

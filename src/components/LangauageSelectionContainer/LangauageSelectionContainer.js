@@ -12,6 +12,9 @@ export const LangauageSelectionContainer = () => {
 
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [isOpen, setOpen] = useState(false);
+    const [isMakeListDisabled, setMakeListDisabled] = useState(true);
+    const [isAddLanguageActive, setAddLanguageActive] = useState(true);
+
 
     const handleLangSelectionChange = (selectedLanguage) => {
         console.log(selectedLanguage);
@@ -25,6 +28,8 @@ export const LangauageSelectionContainer = () => {
             }
         }
 
+        validateMakeListButton(languages);
+
         setSelectedLanguages(languages);
         console.log(languages);
 
@@ -32,6 +37,17 @@ export const LangauageSelectionContainer = () => {
 
     const handlePopup = () => {
         setOpen(!isOpen);
+    }
+
+    const validateMakeListButton = (languages) => {
+
+        if(languages.length >= 2) {
+           languages.forEach(element => {
+               if(element.isActive){
+                   setMakeListDisabled(false);
+               } 
+           }); 
+        }
     }
 
     const addLanguage = (langaugeInput) => {
@@ -42,6 +58,12 @@ export const LangauageSelectionContainer = () => {
         let languages = [...selectedLanguages];
 
         languages.push(languageObj);
+
+        if(languages.length >= 4) {
+            setAddLanguageActive(false);
+        }
+
+        validateMakeListButton(languages);
 
         setSelectedLanguages(languages);
         console.log(languages);
@@ -64,15 +86,15 @@ export const LangauageSelectionContainer = () => {
                                      languageName= {language.languageName} 
                                      isActive = {language.isActive} />
                         })}
-                        <li className="lang-list-li" onClick = {handlePopup}>
+                        {isAddLanguageActive && <li className="lang-list-li" onClick = {handlePopup}>
                             <a className="add-new-lang lang-list-li-a">
                                 <label>+</label>
                                      Add Langauage
                             </a>
-                        </li>
+                        </li>}
                     </ul>
 
-                    <button className="btn btn-orange" name='make-list-button'>Let's make list of vocabulary</button>
+                    <button className="btn btn-orange" disabled={isMakeListDisabled} name='make-list-button'>Let's make list of vocabulary</button>
                 </div>
             </div>
         </div>
