@@ -6,6 +6,7 @@ export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
     const [vocabWords,setVocabWords] = useState([]);
+    const [lastVocabWord, setLastVocabWord] = useState({});
 
     useEffect(() => {
         let languagesObj = [...props.languages];
@@ -17,14 +18,38 @@ export const VocabularyMaker = (props) => {
         console.log(languagesObj);
     },[]);
 
+    useEffect(() => {
+        const listener = event => {
+          if (event.code === "Enter" || event.code === "NumpadEnter") {
+            console.log("Enter key was pressed. Run your function.");
+            event.preventDefault();
+
+            const srNo = vocabWords.length + 1;
+            let enteredlastVocab = {srNo : srNo, ...lastVocabWord}
+            let enteredVocabWords = [...vocabWords];
+            enteredVocabWords.push(enteredlastVocab);
+            setVocabWords(enteredVocabWords);
+            console.log(enteredVocabWords);
+          }
+        };
+        document.addEventListener("keydown", listener);
+        return () => {
+          document.removeEventListener("keydown", listener);
+        };
+      }, [lastVocabWord,vocabWords]);
+
     const handleFormInputChange = (languageName, inputValue) => {
 
-        let enteredVocabWords = [...vocabWords];
+
+        let enteredLastVocabWord = {...lastVocabWord};
 
         const vocabObj = {
             [languageName] : inputValue
         } 
 
+        enteredLastVocabWord = {...enteredLastVocabWord,...vocabObj};
+        setLastVocabWord(enteredLastVocabWord);
+        console.log(enteredLastVocabWord);
 
     }
 
@@ -35,7 +60,7 @@ export const VocabularyMaker = (props) => {
                     
                     <div className="form">
                         {sortedLanguages.map(language => {
-                            return <FormInput key = {language.label} language = {language}/>
+                            return <FormInput key = {language.label} language = {language} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
                         })}
                     </div>
 
