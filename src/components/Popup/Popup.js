@@ -27,7 +27,7 @@ export const Popup = (props) => {
                 <span className = "close-icon" onClick = {props.handleClosePopup}>X</span>
                 <div className = "model-body">
                     <h2 className = "text-center">Add New Language</h2>
-                    <input type="text" id="lang" name="lang" placeholder = "Language Name" onChange ={handleInputChange}></input>
+                    <input type="text" id="lang" name="lang" className = "input-form" placeholder = "Language Name" onChange ={handleInputChange}></input>
                     {isLangInputInvalid && <span className = "text-danger">This field is required</span>}
                     <button className="btn btn-orange" name='add-lang-button' onClick = {addLanguage}>I know this language</button>
                 </div>

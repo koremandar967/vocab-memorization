@@ -1,0 +1,32 @@
+.form-group {
+    display: inline-block;
+    margin: 15px;
+    position: relative;
+    text-align: center;
+}
+
+.form-label {
+    display: inline-block;
+    text-align: center;
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+    color: #555;
+    background-color: rgb(245, 245, 245);
+    position: relative;
+    top: 10px;
+    padding: 0 5px;
+}
+
+.form-input {
+    border: 2px solid #ff7300;
+    padding: 5px;
+    height: 40px;
+    text-transform: capitalize;
+    width: 170px;
+    display: block;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgb(245, 245, 245);
+    
+}

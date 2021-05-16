@@ -57,7 +57,7 @@ h2 {
   font-size: 30px;
 }
 
-input {
+.input-form {
   text-align: center;
   border: 2px solid #ff7300;
   border-radius: 0;
