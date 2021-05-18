@@ -6,7 +6,6 @@ export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
     const [vocabWords,setVocabWords] = useState([]);
-    const [lastVocabWord, setLastVocabWord] = useState({});
 
     useEffect(() => {
         let languagesObj = [...props.languages];
@@ -14,9 +13,14 @@ export const VocabularyMaker = (props) => {
         languagesObj.sort((a,b) => (
             b.isNative - a.isNative
         ));
-        setSortedLanguages(languagesObj);
-        console.log(languagesObj);
-    },[]);
+
+       const newLanguagesObj = languagesObj.map(langObj => {
+            return {...langObj, inputValue : ""}
+        })
+
+        setSortedLanguages(newLanguagesObj);
+        console.log(newLanguagesObj);
+    },[props.languages]);
 
     useEffect(() => {
         const listener = event => {
@@ -24,8 +28,17 @@ export const VocabularyMaker = (props) => {
             console.log("Enter key was pressed. Run your function.");
             event.preventDefault();
 
+            let enteredLastVocabObj = {};
+
+            sortedLanguages.forEach((element,index) => {
+                const vocabObj = {
+                    [element.languageName] : element.inputValue
+                } 
+                enteredLastVocabObj = {...enteredLastVocabObj,...vocabObj};
+            });
+
             const srNo = vocabWords.length + 1;
-            let enteredlastVocab = {srNo : srNo, ...lastVocabWord}
+            let enteredlastVocab = {srNo : srNo, ...enteredLastVocabObj}
             let enteredVocabWords = [...vocabWords];
             enteredVocabWords.push(enteredlastVocab);
             setVocabWords(enteredVocabWords);
@@ -36,20 +49,21 @@ export const VocabularyMaker = (props) => {
         return () => {
           document.removeEventListener("keydown", listener);
         };
-      }, [lastVocabWord,vocabWords]);
+      }, [vocabWords]);
 
     const handleFormInputChange = (languageName, inputValue) => {
 
+        let sortedLanguagesObj = [...sortedLanguages]; 
 
-        let enteredLastVocabWord = {...lastVocabWord};
+        const updatedSortedLanguagesObj = sortedLanguagesObj.map(lang => {
+            if(lang.languageName === languageName) {
+                lang.inputValue = inputValue; 
+            }
+            return lang;
+        });
 
-        const vocabObj = {
-            [languageName] : inputValue
-        } 
-
-        enteredLastVocabWord = {...enteredLastVocabWord,...vocabObj};
-        setLastVocabWord(enteredLastVocabWord);
-        console.log(enteredLastVocabWord);
+        setSortedLanguages(updatedSortedLanguagesObj);
+        console.log({updatedSortedLanguagesObj});
 
     }
 
@@ -60,7 +74,7 @@ export const VocabularyMaker = (props) => {
                     
                     <div className="form">
                         {sortedLanguages.map(language => {
-                            return <FormInput key = {language.label} language = {language} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
+                            return <FormInput key = {language.label} language = {language} value = {language.value} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
                         })}
                     </div>
 
