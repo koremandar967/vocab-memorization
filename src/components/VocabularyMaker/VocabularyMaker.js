@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo} from "react";
 import "./VocabularyMaker.css" ;
 import { FormInput } from "../FormInput/FormInput";
+import {VocabularyTable} from '../VocabularyTable/VocabularyTable'
 
 export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
     const [vocabWords,setVocabWords] = useState([]);
+    const [columns,setColumns] = useState();
 
     useEffect(() => {
         let languagesObj = [...props.languages];
@@ -16,6 +18,9 @@ export const VocabularyMaker = (props) => {
 
         setSortedLanguages(languagesObj);
         console.log(languagesObj);
+        const transformedColumns = transformTableColumns();
+        setColumns(transformedColumns);
+
     },[props.languages]);
 
     useEffect(() => {
@@ -34,7 +39,7 @@ export const VocabularyMaker = (props) => {
             });
 
             const srNo = vocabWords.length + 1;
-            let enteredlastVocab = {srNo : srNo, ...enteredLastVocabObj}
+            let enteredlastVocab = {No : srNo, ...enteredLastVocabObj}
             let enteredVocabWords = [...vocabWords];
             enteredVocabWords.push(enteredlastVocab);
             setVocabWords(enteredVocabWords);
@@ -47,6 +52,31 @@ export const VocabularyMaker = (props) => {
           document.removeEventListener("keydown", listener);
         };
       }, [vocabWords,sortedLanguages]);
+
+      const transformTableColumns = () => {
+
+        let languages = [...props.languages];
+        let transformedVocabObj = {};
+
+        languages.forEach((element,index) => {
+            const vocabObj = {
+                [element.languageName] : element.inputValue
+            } 
+            transformedVocabObj = {...transformedVocabObj,...vocabObj};
+        });
+
+        const enteredlastVocab = {No : 0, ...transformedVocabObj}
+
+        const columns = Object.keys(enteredlastVocab).map((key, id)=>{
+            return {
+              Header: key,
+              accessor: key
+            }
+          });
+
+          return columns;
+
+      }
 
     const handleFormInputChange = (languageName, inputValue) => {
 
@@ -82,7 +112,7 @@ export const VocabularyMaker = (props) => {
                             return <FormInput key = {language.label} language = {language} value = {language.inputValue} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
                         })}
                     </div>
-
+                {Boolean(columns)&&<VocabularyTable columns = {columns} data = {vocabWords}></VocabularyTable>}
         </div>
     );
 

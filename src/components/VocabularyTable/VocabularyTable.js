@@ -1,5 +1,7 @@
-import React, {useState} from 'React'
+import React, {useState} from 'react'
 import {useTable} from 'react-table'
+import "./VocabularyTable.css";
+
 
 export const VocabularyTable = (props) => {
 
@@ -11,8 +13,8 @@ const {
     rows,
     prepareRow,
   } = useTable({
-    columns,
-    data,
+    columns:props.columns,
+    data:props.data
   })
 
     return (
