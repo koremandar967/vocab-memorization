@@ -14,23 +14,19 @@ export const VocabularyMaker = (props) => {
             b.isNative - a.isNative
         ));
 
-       const newLanguagesObj = languagesObj.map(langObj => {
-            return {...langObj, inputValue : ""}
-        })
-
-        setSortedLanguages(newLanguagesObj);
-        console.log(newLanguagesObj);
+        setSortedLanguages(languagesObj);
+        console.log(languagesObj);
     },[props.languages]);
 
     useEffect(() => {
         const listener = event => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
-            console.log("Enter key was pressed. Run your function.");
             event.preventDefault();
 
             let enteredLastVocabObj = {};
+            let enteredLanguagesObj = [...sortedLanguages];
 
-            sortedLanguages.forEach((element,index) => {
+            enteredLanguagesObj.forEach((element,index) => {
                 const vocabObj = {
                     [element.languageName] : element.inputValue
                 } 
@@ -43,13 +39,14 @@ export const VocabularyMaker = (props) => {
             enteredVocabWords.push(enteredlastVocab);
             setVocabWords(enteredVocabWords);
             console.log(enteredVocabWords);
+            clearFormInputValues();
           }
         };
         document.addEventListener("keydown", listener);
         return () => {
           document.removeEventListener("keydown", listener);
         };
-      }, [vocabWords]);
+      }, [vocabWords,sortedLanguages]);
 
     const handleFormInputChange = (languageName, inputValue) => {
 
@@ -63,8 +60,16 @@ export const VocabularyMaker = (props) => {
         });
 
         setSortedLanguages(updatedSortedLanguagesObj);
-        console.log({updatedSortedLanguagesObj});
+    }
 
+    const clearFormInputValues = () => {
+        
+        const updatedLanguagesObj = sortedLanguages.map(element => {
+             element.inputValue = "";
+             return element;
+        });
+
+        setSortedLanguages(updatedLanguagesObj);
     }
 
     return (
@@ -74,7 +79,7 @@ export const VocabularyMaker = (props) => {
                     
                     <div className="form">
                         {sortedLanguages.map(language => {
-                            return <FormInput key = {language.label} language = {language} value = {language.value} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
+                            return <FormInput key = {language.label} language = {language} value = {language.inputValue} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
                         })}
                     </div>
 

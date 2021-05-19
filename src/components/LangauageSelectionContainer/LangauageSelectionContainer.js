@@ -56,7 +56,7 @@ export const LangauageSelectionContainer = () => {
     const addLanguage = (langaugeInput) => {
         const languageObj = {label : langaugeInput.slice(0,2).toLowerCase(),
                        languageName: langaugeInput,
-                       isNative: false }
+                       isNative: false,inputValue:"" }
 
         let languages = [...selectedLanguages];
 
