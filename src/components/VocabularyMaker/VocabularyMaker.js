@@ -2,6 +2,7 @@ import React, {useEffect, useState, useMemo} from "react";
 import "./VocabularyMaker.css" ;
 import { FormInput } from "../FormInput/FormInput";
 import {VocabularyTable} from '../VocabularyTable/VocabularyTable'
+import {DeleteButton} from '../DeleteButton/DeleteButton';
 
 export const VocabularyMaker = (props) => {
 
@@ -67,12 +68,23 @@ export const VocabularyMaker = (props) => {
 
         const enteredlastVocab = {No : 0, ...transformedVocabObj}
 
-        const columns = Object.keys(enteredlastVocab).map((key, id)=>{
+        let columns = Object.keys(enteredlastVocab).map((key, id)=>{
             return {
               Header: key,
               accessor: key
             }
           });
+
+          const deleteButtonColumn = {
+            Header : "Action",
+            accessor: "Action",
+            Cell : ({cell : {value}}) => <DeleteButton values = {value}/>
+
+          };
+
+          columns.push(deleteButtonColumn);
+
+          console.log(columns);
 
           return columns;
 
