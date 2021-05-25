@@ -12,7 +12,7 @@ export const Popup = (props) => {
 
     const addLanguage = () => {
 
-        if(langauageInput.length == 0) {
+        if(langauageInput.length === 0) {
             setLangInputInvalid(true);
         } else {
             props.handleAddLangauge(langauageInput);

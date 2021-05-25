@@ -7,7 +7,7 @@ import {DeleteButton} from '../DeleteButton/DeleteButton';
 export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
-    const [vocabWords,setVocabWords] = useState([]);
+    const [vocabWords,setVocabWords] = useState([{No: 3, noValue: 3, Marathi: "bg", English: "check"}]);
     const [columns,setColumns] = useState();
 
     useEffect(() => {
@@ -40,12 +40,18 @@ export const VocabularyMaker = (props) => {
             });
 
             const srNo = vocabWords.length + 1;
-            let enteredlastVocab = {No : srNo, ...enteredLastVocabObj}
+            const noValue = vocabWords.length + 1;
+            let enteredlastVocab = {No : srNo,noValue : noValue, ...enteredLastVocabObj}
             let enteredVocabWords = [...vocabWords];
             enteredVocabWords.push(enteredlastVocab);
             setVocabWords(enteredVocabWords);
             console.log(enteredVocabWords);
             clearFormInputValues();
+
+            //temp
+            const transformedColumns = transformTableColumns();
+            setColumns(transformedColumns);
+
           }
         };
         document.addEventListener("keydown", listener);
@@ -77,8 +83,8 @@ export const VocabularyMaker = (props) => {
 
           const deleteButtonColumn = {
             Header : "Action",
-            accessor: "Action",
-            Cell : ({cell : {value}}) => <DeleteButton values = {value}/>
+            accessor: "noValue",
+            Cell : ({cell : {value}}) => <DeleteButton values = {value} vocabWords = {vocabWords} onDelete = {(value) => handleDeleteRow(value)}/>
 
           };
 
@@ -89,6 +95,19 @@ export const VocabularyMaker = (props) => {
           return columns;
 
       }
+
+    const handleDeleteRow = (value) => {
+
+        console.log(vocabWords);
+        let enteredVocabWords = [...vocabWords];
+        
+        const updatedVocabWords = enteredVocabWords.filter(wordObj => {
+            return wordObj.noValue != value
+        });
+        console.log(updatedVocabWords);
+        setVocabWords(updatedVocabWords);
+
+    }
 
     const handleFormInputChange = (languageName, inputValue) => {
 
@@ -125,6 +144,7 @@ export const VocabularyMaker = (props) => {
                         })}
                     </div>
                 {Boolean(columns)&&<VocabularyTable columns = {columns} data = {vocabWords}></VocabularyTable>}
+                {/* {Boolean(vocabWords)&&<Table data ={vocabWords}/>} */}
         </div>
     );
 
