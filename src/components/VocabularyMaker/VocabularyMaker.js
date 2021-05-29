@@ -2,11 +2,13 @@ import React, {useEffect, useState, useMemo} from "react";
 import "./VocabularyMaker.css" ;
 import { FormInput } from "../FormInput/FormInput";
 import { Table } from "../Table/Table";
+import {QuizContainer} from '../QuizContainer/QuizContainer'
 
 export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
     const[isInputsValid,setInputsValid] = useState(false);
+    const[isQuizStarted,setQuizStarted] = useState(false);
     const [vocabWords,setVocabWords] = useState([]);
     const CHAR_REGEX = new RegExp(/^[a-zA-Z]+$/);
 
@@ -101,8 +103,12 @@ export const VocabularyMaker = (props) => {
         setSortedLanguages(updatedLanguagesObj);
     }
 
+    const handleClick = () => {
+        setQuizStarted(true);
+    };
+
     return (
-        <div className = "text-center">
+        isQuizStarted ? <QuizContainer questionLength = {vocabWords.length}/> : (<div className = "text-center">
                     <h3 className="top-header">Make Vocabulary with Translation</h3>
                     <p className="text-color-gray">Add <mark className="mark-box">(Min 5)</mark>word of your native language <strong>{props.nativeLang}</strong> and translate it into others.</p>
                     
@@ -113,8 +119,8 @@ export const VocabularyMaker = (props) => {
                     </div>
                 {(vocabWords.length > 0)? <Table data ={vocabWords} onDelete = {(value) => handleDeleteRow(value)}/>
                     : <p className="text-color-gray">Fill All Fields At Above And Press <mark className="mark-box">ENTER</mark>Key</p>}
-                    <button className="btn-start btn-start-orange" disabled={vocabWords.length < 5}>START TEST</button>
-        </div>
+                    <button className="btn-start btn-start-orange" disabled={vocabWords.length < 5} onClick = {handleClick}>START TEST</button>
+        </div>)
     );
 
 }
