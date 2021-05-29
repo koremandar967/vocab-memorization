@@ -6,7 +6,9 @@ import { Table } from "../Table/Table";
 export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
+    const[isInputsValid,setInputsValid] = useState(false);
     const [vocabWords,setVocabWords] = useState([]);
+    const CHAR_REGEX = new RegExp(/^[a-zA-Z]+$/);
 
     useEffect(() => {
         let languagesObj = [...props.languages];
@@ -25,23 +27,28 @@ export const VocabularyMaker = (props) => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
             event.preventDefault();
 
-            let enteredLastVocabObj = {};
+            let enteredLastVocabObj = undefined;
             let enteredLanguagesObj = [...sortedLanguages];
 
             enteredLanguagesObj.forEach((element,index) => {
-                const vocabObj = {
-                    [element.languageName] : element.inputValue
-                } 
-                enteredLastVocabObj = {...enteredLastVocabObj,...vocabObj};
+                if(element.inputValue.trim().length !== 0) {
+                    const vocabObj = {
+                        [element.languageName] : element.inputValue
+                    } 
+                    enteredLastVocabObj = {...enteredLastVocabObj,...vocabObj};
+                }
             });
 
             const srNo = vocabWords.length + 1;
-            let enteredlastVocab = {No : srNo, ...enteredLastVocabObj}
-            let enteredVocabWords = [...vocabWords];
-            enteredVocabWords.push(enteredlastVocab);
-            setVocabWords(enteredVocabWords);
-            console.log(enteredVocabWords);
-            clearFormInputValues();
+
+            if(Boolean(enteredLastVocabObj) && isInputsValid) {
+                let enteredlastVocab = {No : srNo, ...enteredLastVocabObj}
+                let enteredVocabWords = [...vocabWords];
+                enteredVocabWords.push(enteredlastVocab);
+                setVocabWords(enteredVocabWords);
+                console.log(enteredVocabWords);
+                clearFormInputValues();
+            }
 
           }
         };
@@ -67,7 +74,11 @@ export const VocabularyMaker = (props) => {
     const handleFormInputChange = (languageName, inputValue) => {
 
         let sortedLanguagesObj = [...sortedLanguages]; 
+        let isValid = false;
 
+        if(CHAR_REGEX.test(inputValue.trim())) {
+            isValid  = true;
+        }
         const updatedSortedLanguagesObj = sortedLanguagesObj.map(lang => {
             if(lang.languageName === languageName) {
                 lang.inputValue = inputValue; 
@@ -76,6 +87,8 @@ export const VocabularyMaker = (props) => {
         });
 
         setSortedLanguages(updatedSortedLanguagesObj);
+        setInputsValid(isValid);
+        return isValid;
     }
 
     const clearFormInputValues = () => {

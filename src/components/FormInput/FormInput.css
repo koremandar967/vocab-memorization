@@ -30,3 +30,15 @@
     background-color: rgb(245, 245, 245);
     
 }
+
+.text-danger {
+    font-size: 12px;
+    letter-spacing: .5px;
+    font-weight: 400;
+    color: #f30000;
+    text-align: left;
+    display: block;
+    margin-top: 5px;
+    display: table;
+  }
+  
