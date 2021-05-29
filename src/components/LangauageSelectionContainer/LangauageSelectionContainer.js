@@ -1,4 +1,3 @@
-import { computeHeadingLevel } from '@testing-library/dom';
 import React, { useState } from 'react';
 import './LangauageSelectionContainer.css';
 import { LangauageSelector } from '../LangauageSelector/LangauageSelector';
@@ -6,10 +5,6 @@ import { Popup } from "../Popup/Popup";
 import { VocabularyMaker } from "../VocabularyMaker/VocabularyMaker";
 
 export const LangauageSelectionContainer = () => {
-
-    const languages = [{ label: 'eng', languageName: 'English', isNative: false},
-    { label: 'hin', languageName: 'Hindi', isNative: false},
-    { label: 'mar', languageName: 'Marathi', isNative: false}]
 
     const [selectedLanguages, setSelectedLanguages] = useState([]);
     const [isOpen, setOpen] = useState(false);
@@ -82,7 +77,8 @@ export const LangauageSelectionContainer = () => {
     return isOpen ? <Popup handleClosePopup = {handlePopup} handleAddLangauge = {addLanguage}/> : <div className="main-container">
         <div className="container">
             <div className="wrap-box">
-                {isVocabMakerOpen ? <VocabularyMaker nativeLang = {nativeLanguage.toUpperCase()} languages = {selectedLanguages}/> : <div className="text-center">
+                {isVocabMakerOpen ? <VocabularyMaker nativeLang = {nativeLanguage.toUpperCase()} languages = {selectedLanguages}/> 
+                : <div className="text-center">
                     <h3 className="top-header">Add & Select Langauage</h3>
                     <p className="text-color-gray">Add langauages which you know <mark className="mark-box">(Min 2)</mark> and <mark className="mark-box">(Max 4)</mark> and select which is your native.</p>
 

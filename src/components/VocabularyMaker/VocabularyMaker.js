@@ -1,14 +1,12 @@
 import React, {useEffect, useState, useMemo} from "react";
 import "./VocabularyMaker.css" ;
 import { FormInput } from "../FormInput/FormInput";
-import {VocabularyTable} from '../VocabularyTable/VocabularyTable'
-import {DeleteButton} from '../DeleteButton/DeleteButton';
+import { Table } from "../Table/Table";
 
 export const VocabularyMaker = (props) => {
 
     const[sortedLanguages, setSortedLanguages] = useState(props.languages);
-    const [vocabWords,setVocabWords] = useState([{No: 3, noValue: 3, Marathi: "bg", English: "check"}]);
-    const [columns,setColumns] = useState();
+    const [vocabWords,setVocabWords] = useState([]);
 
     useEffect(() => {
         let languagesObj = [...props.languages];
@@ -19,8 +17,6 @@ export const VocabularyMaker = (props) => {
 
         setSortedLanguages(languagesObj);
         console.log(languagesObj);
-        const transformedColumns = transformTableColumns();
-        setColumns(transformedColumns);
 
     },[props.languages]);
 
@@ -40,17 +36,12 @@ export const VocabularyMaker = (props) => {
             });
 
             const srNo = vocabWords.length + 1;
-            const noValue = vocabWords.length + 1;
-            let enteredlastVocab = {No : srNo,noValue : noValue, ...enteredLastVocabObj}
+            let enteredlastVocab = {No : srNo, ...enteredLastVocabObj}
             let enteredVocabWords = [...vocabWords];
             enteredVocabWords.push(enteredlastVocab);
             setVocabWords(enteredVocabWords);
             console.log(enteredVocabWords);
             clearFormInputValues();
-
-            //temp
-            const transformedColumns = transformTableColumns();
-            setColumns(transformedColumns);
 
           }
         };
@@ -58,52 +49,16 @@ export const VocabularyMaker = (props) => {
         return () => {
           document.removeEventListener("keydown", listener);
         };
-      }, [vocabWords,sortedLanguages]);
+      });
 
-      const transformTableColumns = () => {
-
-        let languages = [...props.languages];
-        let transformedVocabObj = {};
-
-        languages.forEach((element,index) => {
-            const vocabObj = {
-                [element.languageName] : element.inputValue
-            } 
-            transformedVocabObj = {...transformedVocabObj,...vocabObj};
-        });
-
-        const enteredlastVocab = {No : 0, ...transformedVocabObj}
-
-        let columns = Object.keys(enteredlastVocab).map((key, id)=>{
-            return {
-              Header: key,
-              accessor: key
-            }
-          });
-
-          const deleteButtonColumn = {
-            Header : "Action",
-            accessor: "noValue",
-            Cell : ({cell : {value}}) => <DeleteButton values = {value} vocabWords = {vocabWords} onDelete = {(value) => handleDeleteRow(value)}/>
-
-          };
-
-          columns.push(deleteButtonColumn);
-
-          console.log(columns);
-
-          return columns;
-
-      }
-
-    const handleDeleteRow = (value) => {
+    const handleDeleteRow = (selectedRow) => {
 
         console.log(vocabWords);
-        let enteredVocabWords = [...vocabWords];
         
-        const updatedVocabWords = enteredVocabWords.filter(wordObj => {
-            return wordObj.noValue != value
+        const updatedVocabWords = vocabWords.filter(wordObj => {
+            return wordObj.No !== selectedRow.No
         });
+
         console.log(updatedVocabWords);
         setVocabWords(updatedVocabWords);
 
@@ -143,8 +98,8 @@ export const VocabularyMaker = (props) => {
                             return <FormInput key = {language.label} language = {language} value = {language.inputValue} handleInputChange ={(languageName, inputValue) => handleFormInputChange(languageName, inputValue)} />
                         })}
                     </div>
-                {Boolean(columns)&&<VocabularyTable columns = {columns} data = {vocabWords}></VocabularyTable>}
-                {/* {Boolean(vocabWords)&&<Table data ={vocabWords}/>} */}
+                {(vocabWords.length > 0)? <Table data ={vocabWords} onDelete = {(value) => handleDeleteRow(value)}/>
+                    : <p className="text-color-gray">Fill All Fields At Above And Press <mark className="mark-box">ENTER</mark>Key</p>}
         </div>
     );
 

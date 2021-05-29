@@ -1,41 +1,43 @@
-import React, {useState} from 'react';
-
+import React from 'react';
+import { RenderRow } from "./RenderRow/RenderRow";
+import './Table.css';
 
 export const Table = (props) => {
 
   const getKeys = () => {
-    return Object.keys(props.data[0]);
+    return (props.data.length > 0) && Object.keys(props.data[0]);
   }
 
-  const getHeader = () => {
+  const getHeader =() => {
       const keys = getKeys();
-      return keys.map((key,index)=> {
+      let columns =  keys.map((key,index)=> {
           return <th key = {key}>{key.toUpperCase()}</th>
       });
-  }
 
-  const renderRow = (rowData) => {
-    const keys = getKeys();
-    return keys.map((key,index) => {
-      return <td key ={rowData[key]}>{rowData[key]}</td>
-    });
+      columns.push(<th key = {'Delete'}>{"DELETE"}</th>);
+      return columns;
   }
 
   const getRowsData = () => {
     const keys = getKeys();
-      return props.data.map((row, index) => {
-        return <tr key = {index}>{renderRow(row)}</tr>
+      let rows =  props.data.map((row, index) => {
+        return <tr key = {index}><RenderRow rowData = {row} keys = {keys} handleDelete = {() => deleteSelectedRow(row)}/></tr>
       });
+      return rows;
+  }
+
+  const deleteSelectedRow = (selectedRow) => {
+    props.onDelete(selectedRow)
   }
 
     return(
       <div>
         <table>
           <thead>
-          <tr>{getHeader}</tr>
+          <tr>{getHeader()}</tr>
           </thead>
           <tbody>
-          {getRowsData}
+          {getRowsData()}
           </tbody>
         </table>
       </div>
