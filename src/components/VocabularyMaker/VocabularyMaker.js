@@ -100,6 +100,7 @@ export const VocabularyMaker = (props) => {
                     </div>
                 {(vocabWords.length > 0)? <Table data ={vocabWords} onDelete = {(value) => handleDeleteRow(value)}/>
                     : <p className="text-color-gray">Fill All Fields At Above And Press <mark className="mark-box">ENTER</mark>Key</p>}
+                    <button className="btn-start btn-start-orange" disabled={vocabWords.length < 5}>START TEST</button>
         </div>
     );
 

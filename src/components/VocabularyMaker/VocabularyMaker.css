@@ -7,3 +7,41 @@
     box-sizing: border-box;
 }
 
+.btn-start {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-start-orange {
+    background-color: #ff7300;
+    color: #fff;
+    border-radius: 3px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    font-size: 15px;
+    padding: 10px 20px;
+}
+
+.btn-start:disabled {
+    cursor: not-allowed;
+    /* filter: alpha(opacity=65); */
+    opacity: .65;
+    box-shadow: none;
+}
+
