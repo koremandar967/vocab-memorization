@@ -108,7 +108,7 @@ export const VocabularyMaker = (props) => {
     };
 
     return (
-        isQuizStarted ? <QuizContainer questionLength = {vocabWords.length}/> : (<div className = "text-center">
+        isQuizStarted ? <QuizContainer questionLength = {vocabWords.length} vocabWords = {vocabWords}/> : (<div className = "text-center">
                     <h3 className="top-header">Make Vocabulary with Translation</h3>
                     <p className="text-color-gray">Add <mark className="mark-box">(Min 5)</mark>word of your native language <strong>{props.nativeLang}</strong> and translate it into others.</p>
                     

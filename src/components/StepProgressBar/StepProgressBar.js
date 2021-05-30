@@ -9,7 +9,7 @@ export const StepProgressBar = (props) => {
   
   const getSteps = () => {
     console.log(props.stepLength);
-    for(let i = 0; i<props.stepLength; i++) {
+    for(let i = 0; i<=props.stepLength; i++) {
       
       transformedSteps.push(<Step key = {i} transition="scale">
       {({ accomplished }) => (
@@ -27,7 +27,7 @@ export const StepProgressBar = (props) => {
   return (
     <div className = "progress-wrapper">
       <ProgressBar
-        percent={75}
+        percent={props.progress}
         filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
       >
         {getSteps()}
